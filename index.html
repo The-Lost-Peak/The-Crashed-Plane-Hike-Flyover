@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html> 
 <html lang="en">
 <head>
@@ -120,13 +119,8 @@ html,body{
   display:none;
 }
 
-/* Hide all Mapbox branding */
-.mapboxgl-ctrl-logo,
-.mapboxgl-ctrl-attrib,
-.mapboxgl-ctrl-bottom-left,
-.mapboxgl-ctrl-bottom-right{
-  display:none !important;
-}
+/* Mapbox controls: keep visible for required attribution and logo */
+/* (Removed previous CSS that hid Mapbox branding) */
 
 /* Fake fullscreen hook (desktop / android) */
 body.fake-fullscreen #map{
@@ -560,8 +554,10 @@ function isIOS(){
     pitch:75,
     bearing:initialBearing,
     antialias:true,
-    attributionControl:false
+    attributionControl:true
   });
+
+  map.addControl(new mapboxgl.AttributionControl({ compact: false }), "bottom-right");
 
   ["mousedown","touchstart","dragstart","rotatestart","zoomstart","pitchstart"].forEach(ev=>{
     map.on(ev,e=>{
@@ -880,4 +876,3 @@ function tick(ts){
 
 </body>
 </html>
-```
