@@ -120,14 +120,6 @@ html,body{
 }
 
 /* IMPORTANT: do not hide Mapbox branding or attribution */
-/* Removed:
-.mapboxgl-ctrl-logo,
-.mapboxgl-ctrl-attrib,
-.mapboxgl-ctrl-bottom-left,
-.mapboxgl-ctrl-bottom-right{
-  display:none !important;
-}
-*/
 
 /* Fake fullscreen hook (desktop / android) */
 body.fake-fullscreen #map{
@@ -232,9 +224,7 @@ body.fake-fullscreen #btnMobileMenu{
     align-items:flex-end;
   }
 
-  /* iOS FULLSCREEN TAB
-     - bigger buttons, but speed icon kept small like normal mobile
-  */
+  /* iOS FULLSCREEN TAB */
   body.ios-fullscreen{
     --btn-size:57px;
   }
@@ -244,7 +234,6 @@ body.fake-fullscreen #btnMobileMenu{
     height:27px;
   }
 
-  /* KEY CHANGE: fullscreen speed icon back to small size */
   body.ios-fullscreen #iconSpeed{
     width:17px !important;
     height:17px !important;
@@ -276,7 +265,6 @@ body.fake-fullscreen #btnMobileMenu{
 <body>
 <div id="map"></div>
 
-<!-- LEFT SIDE: play / restart / reset / camera -->
 <div class="ui ui-left">
 
   <button id="btnToggle" class="btn">
@@ -343,7 +331,6 @@ body.fake-fullscreen #btnMobileMenu{
   </button>
 </div>
 
-<!-- RIGHT SIDE: fullscreen / zoom / layers / speed -->
 <div class="ui ui-right">
 
   <button id="btnFull" class="btn">
@@ -394,7 +381,6 @@ body.fake-fullscreen #btnMobileMenu{
   </div>
 </div>
 
-<!-- MOBILE MENU BUTTON -->
 <button id="btnMobileMenu" class="btn mobile-menu-btn">
   <svg id="iconMobileMenu" class="active" viewBox="0 0 24 24">
     <circle cx="6" cy="12" r="2"></circle>
@@ -564,8 +550,8 @@ function isIOS(){
     attributionControl:false
   });
 
-  /* MINIMUM ATTRIBUTION BACK ON (single control, no duplicates) */
-  map.addControl(new mapboxgl.AttributionControl({ compact: false }), "bottom-right");
+  /* COMPACT ATTRIBUTION (Mapbox logo bottom left + info icon) */
+  map.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-right");
 
   ["mousedown","touchstart","dragstart","rotatestart","zoomstart","pitchstart"].forEach(ev=>{
     map.on(ev,e=>{
@@ -841,8 +827,7 @@ function tick(ts){
   requestAnimationFrame(tick);
 }
 
-/* MOBILE MENU TOGGLE – Layers + Speed in vertical stack on mobile,
-   menu stays separate in bottom right */
+/* MOBILE MENU TOGGLE */
 (function(){
   const btnMobileMenu = document.getElementById("btnMobileMenu");
   const uiLeft = document.querySelector(".ui-left");
