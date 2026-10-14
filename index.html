@@ -21,21 +21,16 @@ html,body{margin:0;height:100%;background:#e9eef0;font-family:Inter,system-ui,-a
 .fs-btn svg.solid{fill:#1c1c1e;stroke:none}
 .fs-btn.on{background:rgba(236,38,41,.85);border-color:rgba(236,38,41,.9)}
 .fs-btn.on svg{stroke:#fff;filter:none}.fs-btn.on svg.solid{fill:#fff}
-/* right-hand stack, bottom up: fullscreen, layers, camera, reset (same places as the peak maps) */
+/* one right-hand column, bottom up: fullscreen, layers, camera, reset, then speed, restart, play */
 .r{right:11px}
-#b-fs{bottom:49px}#b-lay{bottom:97px}#b-cam{bottom:145px}#b-reset{bottom:193px}
-/* play controls: bottom left */
-.play{position:absolute;left:11px;bottom:12px;z-index:10;display:flex;gap:8px}
-.play .fs-btn{position:static}
-#b-play{width:auto;padding:0 16px 0 12px;gap:7px;font:600 14px/1 Inter,system-ui,sans-serif;color:#1c1c1e;background:rgba(255,255,255,.85)}
-#b-play.on{background:rgba(236,38,41,.9);color:#fff}
+#b-fs{bottom:49px}#b-lay{bottom:97px}#b-cam{bottom:145px}#b-reset{bottom:193px}#b-speed{bottom:251px}#b-restart{bottom:299px}#b-play{bottom:347px}
+#b-play.on{background:rgba(236,38,41,.9);border-color:rgba(236,38,41,.95)}
 #b-play svg{width:18px;height:18px}
-#b-speed{width:auto;min-width:38px;padding:0 10px;font:700 13px/1 Inter,system-ui,sans-serif;color:#1c1c1e}
+#b-speed{position:absolute}
+#b-speed b{position:absolute;top:-5px;right:-6px;min-width:17px;height:17px;padding:0 3px;box-sizing:border-box;border-radius:999px;background:#1c1c1e;color:#fff;font:700 9.5px/17px Inter,system-ui,sans-serif;text-align:center}
 body.fs .fs-btn{width:50px;height:50px}
 body.fs .r{right:20px}
-body.fs #b-fs{bottom:50px}body.fs #b-lay{bottom:110px}body.fs #b-cam{bottom:170px}body.fs #b-reset{bottom:230px}
-body.fs .play{left:20px;bottom:20px}
-body.fs #b-speed,body.fs #b-play{width:auto}
+body.fs #b-fs{bottom:50px}body.fs #b-lay{bottom:110px}body.fs #b-cam{bottom:170px}body.fs #b-reset{bottom:230px}body.fs #b-speed{bottom:300px}body.fs #b-restart{bottom:360px}body.fs #b-play{bottom:420px}
 .mapboxgl-ctrl-bottom-right{right:0}
 </style>
 </head>
@@ -46,12 +41,10 @@ body.fs #b-speed,body.fs #b-play{width:auto}
 <button id="b-reset" class="fs-btn r" title="Back to the start view" aria-label="Reset view"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg></button>
 <button id="b-cam" class="fs-btn r" title="Switch between 3D and top-down view" aria-label="Switch camera"><svg id="i-3d" viewBox="0 0 24 24"><path d="M12 2 3 7v10l9 5 9-5V7z"></path><path d="M3 7l9 5 9-5M12 12v10"></path></svg><svg id="i-2d" viewBox="0 0 24 24" style="display:none"><path d="M9 4 3 6.5v13.5L9 17.5l6 2.5 6-2.5V4l-6 2.5z"></path><path d="M9 4v13.5M15 6.5V20"></path></svg></button>
 <button id="b-lay" class="fs-btn r" title="Switch to topographic map" aria-label="Switch map layer"><svg viewBox="0 0 24 24"><polygon points="12 2 22 8.5 12 15 2 8.5 12 2"></polygon><polyline points="2 15.5 12 22 22 15.5"></polyline></svg></button>
-<button id="b-fs" class="fs-btn r" title="Fullscreen" aria-label="Fullscreen"><svg id="i-exp" viewBox="0 0 24 24"><polyline points="4,9 4,4 9,4"/><polyline points="20,9 20,4 15,4"/><polyline points="4,15 4,20 9,20"/><polyline points="20,15 20,20 15,20"/></svg><svg id="i-col" viewBox="0 0 24 24" style="display:none"><polyline points="9,4 4,4 4,9"/><polyline points="15,4 20,4 20,9"/><polyline points="9,20 4,20 4,15"/><polyline points="15,20 20,20 20,15"/></svg></button>
-<div class="play">
-  <button id="b-play" class="fs-btn" aria-label="Play flyover"><svg id="iconPlay" class="solid" viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z"></path></svg><svg id="iconPause" class="solid" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4.5" width="4.2" height="15" rx="1.2"></rect><rect x="13.8" y="4.5" width="4.2" height="15" rx="1.2"></rect></svg><span id="t-play">Play flyover</span></button>
-  <button id="b-restart" class="fs-btn" title="Back to the start of the route" aria-label="Restart flyover"><svg class="solid" viewBox="0 0 24 24"><rect x="5" y="5" width="2.6" height="14" rx="1"></rect><path d="M19 5.5v13L9 12z"></path></svg></button>
-  <button id="b-speed" class="fs-btn" title="Flyover speed" aria-label="Flyover speed">1×</button>
-</div>
+<button id="b-fs" class="fs-btn r" title="Fullscreen" aria-label="Fullscreen"><svg id="i-exp" viewBox="0 0 24 24"><polyline points="4,9 4,4 9,4"/><polyline points="20,9 20,4 15,4"/><polyline points="4,15 4,20 9,20"/><polyline points="20,15 20,20 15,20"/></svg><svg id="i-col" viewBox="0 0 24 24" style="display:none"><polyline points="4,9 9,9 9,4"/><polyline points="20,9 15,9 15,4"/><polyline points="4,15 9,15 9,20"/><polyline points="20,15 15,15 15,20"/></svg></button>
+<button id="b-play" class="fs-btn r" title="Play flyover" aria-label="Play flyover"><svg id="iconPlay" class="solid" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg><svg id="iconPause" class="solid" viewBox="0 0 24 24" style="display:none"><rect x="6" y="5" width="4" height="14" rx="1.2"></rect><rect x="14" y="5" width="4" height="14" rx="1.2"></rect></svg></button>
+<button id="b-restart" class="fs-btn r" title="Back to the start of the route" aria-label="Restart flyover"><svg class="solid" viewBox="0 0 24 24"><rect x="5" y="5" width="2.6" height="14" rx="1"></rect><path d="M19 5.5v13L9 12z"></path></svg></button>
+<button id="b-speed" class="fs-btn r" title="Flyover speed" aria-label="Flyover speed 1x"><svg class="solid" viewBox="0 0 24 24"><path d="M3 6v12l8.5-6zM12.5 6v12L21 12z"></path></svg><b>1×</b></button>
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
@@ -310,7 +303,7 @@ function setPlaying(v){
   }
   document.getElementById("iconPlay").style.display = playing ? "none" : "block";
   document.getElementById("iconPause").style.display = playing ? "block" : "none";
-  document.getElementById("t-play").textContent = playing ? "Pause" : "Play flyover";
+  document.getElementById("b-play").setAttribute("aria-label", playing ? "Pause flyover" : "Play flyover");
   document.getElementById("b-play").classList.toggle("on",playing);
 }
 document.getElementById("b-play").onclick=()=>setPlaying(!playing);
@@ -325,7 +318,7 @@ document.getElementById("b-restart").onclick=()=>{
 
 document.getElementById("b-speed").onclick=function(){
   speedIx=(speedIx+1)%SPEEDS.length;
-  this.textContent=SPEEDS[speedIx][0]+"×";
+  this.querySelector("b").textContent=SPEEDS[speedIx][0]+"×";this.setAttribute("aria-label","Flyover speed "+SPEEDS[speedIx][0]+"x");
 };
 
 document.getElementById("b-reset").onclick=()=>{
@@ -359,7 +352,21 @@ function syncFs(){
 }
 ["fullscreenchange","webkitfullscreenchange"].forEach(ev=>document.addEventListener(ev,syncFs));
 
+/* on a Lost Peak page: ask the page to grow this map to fill the screen (same as the Ethels map); works on iPhone too */
+const EMBEDDED = window.self !== window.top;
+let pageFs = false;
+function setPageFs(on){
+  pageFs = on;
+  document.body.classList.toggle("fs", on);
+  document.getElementById("i-exp").style.display = on ? "none" : "block";
+  document.getElementById("i-col").style.display = on ? "block" : "none";
+  document.getElementById("b-fs").setAttribute("aria-label", on ? "Exit fullscreen" : "Fullscreen");
+  try{ window.parent.postMessage({type:"lpFs", on:on}, "*"); }catch(e){}
+  if(map){ setTimeout(()=>map.resize(),60); setTimeout(()=>map.resize(),400); }
+}
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && pageFs) setPageFs(false); });
 document.getElementById("b-fs").onclick=()=>{
+  if(EMBEDDED){ setPageFs(!pageFs); return; }
   if(isIOS()){
     const url = new URL(window.location.href);
     url.searchParams.set("fs","1");
