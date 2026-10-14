@@ -323,9 +323,10 @@ document.getElementById("b-speed").onclick=function(){
 
 document.getElementById("b-reset").onclick=()=>{
   if(!route || !map) return;
-  setPlaying(false);
+  /* only moves the camera: a playing flyover keeps playing and the camera snaps back behind the walker */
   userOverride=false;camMode="follow";showCam();
   camCenter=null;camBearing=null;
+  if(playing){ currentZoom=START_ZOOM;targetZoom=START_ZOOM; return; }
   if(homeView) map.fitBounds(homeView.b,{padding:60,pitch:75,bearing:homeView.bearing,duration:900});
 };
 
